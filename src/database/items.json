@@ -1,0 +1,140 @@
+{
+  "ancient_rules": {
+    "id": "ancient_rules",
+    "name": "Ancient Rules",
+    "description": "Held item: Once per battle allows one Dragon-type move to gain +1 priority, then is consumed.",
+    "effectId": "item:ancient_rules"
+  },
+  "revival_ring": {
+    "id": "revival_ring",
+    "name": "Revival Ring",
+    "description": "If holder faints, revive it once per battle with 30% HP from the GY.",
+    "effectId": "item:revival_ring"
+  },
+  "life_amulet": {
+    "id": "life_amulet",
+    "name": "Life Amulet",
+    "description": "Restores 15% max HP per turn while on the field.",
+    "effectId": "item:life_amulet"
+  },
+  "choice_band": {
+    "id": "choice_band",
+    "name": "Pot of Greed - Choice Band",
+    "description": "Boosts Atk by 1.5x, but restricts user to the first selected move until swapped out.",
+    "effectId": "item:choice_band"
+  },
+  "choice_specs": {
+    "id": "choice_specs",
+    "name": "Graceful Charity - Choice Specs",
+    "description": "Boosts SpAtk by 1.5x, but restricts user to the first selected move until swapped out.",
+    "effectId": "item:choice_specs"
+  },
+  "choice_scarf": {
+    "id": "choice_scarf",
+    "name": "Upstart Goblin - Choice Scarf",
+    "description": "Boosts Spe by 1.5x, but restricts user to the first selected move until swapped out.",
+    "effectId": "item:choice_scarf"
+  },
+  "focus_sash": {
+    "id": "focus_sash",
+    "name": "Swords of Revealing Light - Focus Sash",
+    "description": "Prevents a 1-hit KO from full health, leaving the monster at 1 HP. Consumed on use.",
+    "effectId": "item:focus_sash"
+  },
+  "life_orb": {
+    "id": "life_orb",
+    "name": "Supply Squad - Life Orb",
+    "description": "Boosts move damage by 1.3x, but forces the user to lose 10% Max HP per attack.",
+    "effectId": "item:life_orb"
+  },
+  "leftovers": {
+    "id": "leftovers",
+    "name": "Dian Keto the Cure Master - Leftovers",
+    "description": "Passively restores 1/16th Max HP at the end of every active turn sequence.",
+    "effectId": "item:leftovers"
+  },
+  "expert_belt": {
+    "id": "expert_belt",
+    "name": "Mage Power - Expert Belt",
+    "description": "Boosts damage by 1.2x when striking with a super-effective move.",
+    "effectId": "item:expert_belt"
+  },
+  "assault_vest": {
+    "id": "assault_vest",
+    "name": "Solemn Judgment - Assault Vest",
+    "description": "Increases SpDef by 1.5x, but blocks the user from activating any Status moves.",
+    "effectId": "item:assault_vest"
+  },
+  "heavy_duty_boots": {
+    "id": "heavy_duty_boots",
+    "name": "Mystical Space Typhoon - Heavy-Duty Boots",
+    "description": "Protects the holding monster from trap/hazard damage upon switching onto the field.",
+    "effectId": "item:heavy_duty_boots"
+  },
+  "rocky_helmet": {
+    "id": "rocky_helmet",
+    "name": "Mirror Force - Rocky Helmet",
+    "description": "Deals 1/6th Max HP recoil damage back to any attacker using contact physical moves.",
+    "effectId": "item:rocky_helmet"
+  },
+  "eject_button": {
+    "id": "eject_button",
+    "name": "Heavy Storm - Eject Button",
+    "description": "Forces the monster to immediately switch out to a bench reserve when struck by an attack.",
+    "effectId": "item:eject_button"
+  },
+  "air_balloon": {
+    "id": "air_balloon",
+    "name": "Waboku - Air Balloon",
+    "description": "Grants immunity to EARTH attacks; breaks instantly when struck by any direct move damage.",
+    "effectId": "item:air_balloon"
+  },
+  "sitrus_berry": {
+    "id": "sitrus_berry",
+    "name": "Monster Reborn - Sitrus Berry",
+    "description": "Automatically restores 25% Max HP when the holder drops below 50% health. Consumed on use.",
+    "effectId": "item:sitrus_berry"
+  },
+  "mental_herb": {
+    "id": "mental_herb",
+    "name": "Dark Bribe - Mental Herb",
+    "description": "Instantly cures infatuation, taunts, or move-bind lock states. Consumed on use.",
+    "effectId": "item:mental_herb"
+  },
+  "iron_ball": {
+    "id": "iron_ball",
+    "name": "Book of Moon - Iron Ball",
+    "description": "Lowers Spe modifier by 50% and grounds airborne or levitating element properties.",
+    "effectId": "item:iron_ball"
+  },
+  "flame_orb": {
+    "id": "flame_orb",
+    "name": "Foolish Burial - Flame Orb",
+    "description": "Inflicts self-burn state at the end of the turn, cutting physical Atk but enabling specific abilities.",
+    "effectId": "item:flame_orb"
+  },
+  "toxic_orb": {
+    "id": "toxic_orb",
+    "name": "Card Destruction - Toxic Orb",
+    "description": "Inflicts self-badly poisoned state at the end of the turn, ticking up damage recursively.",
+    "effectId": "item:toxic_orb"
+  },
+  "lagging_tail": {
+    "id": "lagging_tail",
+    "name": "Imperial Order - Lagging Tail",
+    "description": "Forces the user to execute moves last inside their priority brackets regardless of raw Spe.",
+    "effectId": "item:lagging_tail"
+  },
+  "white_herb": {
+    "id": "white_herb",
+    "name": "Limiter Removal - White Herb",
+    "description": "Resets all lowered stats back to neutral formatting values once per battle. Consumed on use.",
+    "effectId": "item:white_herb"
+  },
+  "black_sludge": {
+    "id": "black_sludge",
+    "name": "United We Stand - Black Sludge",
+    "description": "Restores 1/16th Max HP for ZOMBIE/FIEND monsters; drains health from any other archetypes.",
+    "effectId": "item:black_sludge"
+  }
+}

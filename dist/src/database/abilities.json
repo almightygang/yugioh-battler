@@ -1,0 +1,98 @@
+{
+    "beacon_of_white": {
+        "id": "beacon_of_white",
+        "name": "Beacon of White",
+        "description": "On entry, summons Blinding Radiance weather.",
+        "effectId": "ability:beacon_of_white"
+    },
+    "eyes_of_blue": {
+        "id": "eyes_of_blue",
+        "name": "Eyes of Blue",
+        "description": "Redirects single-target attacks away from allied Dragons to this mon when possible and boosts teammates SpAtk when targeted.",
+        "effectId": "ability:eyes_of_blue"
+    },
+    "graveyard_king": {
+        "id": "graveyard_king",
+        "name": "Graveyard King",
+        "description": "Gains +30% ATK while there are 2+ monsters in the GY.",
+        "effectId": "ability:graveyard_king"
+    },
+    "zombie_lord": {
+        "id": "zombie_lord",
+        "name": "Zombie Lord",
+        "description": "On entry, becomes Vitalized if no primary status is active.",
+        "effectId": "ability:zombie_lord"
+    },
+    "intimidate": {
+        "id": "intimidate",
+        "name": "Intimidate",
+        "description": "Lowers the physical Attack stat stage of all active adjacent opponents by 1 level upon entering the field.",
+        "effectId": "ability:intimidate"
+    },
+    "regenerator": {
+        "id": "regenerator",
+        "name": "Regenerator",
+        "description": "Automatically restores 33% Max HP when switching out of the active combat slot back into the reserve bench.",
+        "effectId": "ability:regenerator"
+    },
+    "levitate": {
+        "id": "levitate",
+        "name": "Levitate",
+        "description": "Grants complete immunity to all incoming EARTH-type attacks, entry hazards, and terrain-based field modifiers.",
+        "effectId": "ability:levitate"
+    },
+    "prankster": {
+        "id": "prankster",
+        "name": "Prankster",
+        "description": "Grants +1 priority to all moves categorized as Status moves.",
+        "effectId": "ability:prankster"
+    },
+    "guts": {
+        "id": "guts",
+        "name": "Guts",
+        "description": "Boosts physical Attack by 1.5x if afflicted with a status condition, while ignoring the attack reduction penalty of Burns.",
+        "effectId": "ability:guts"
+    },
+    "sturdy": {
+        "id": "sturdy",
+        "name": "Sturdy",
+        "description": "Prevents the monster from being knocked out from full health by a single attack, leaving it at 1 HP instead.",
+        "effectId": "ability:sturdy"
+    },
+    "serene_grace": {
+        "id": "serene_grace",
+        "name": "Serene Grace",
+        "description": "Doubles the baseline trigger probability of secondary effects on attacks.",
+        "effectId": "ability:serene_grace"
+    },
+    "mold_breaker": {
+        "id": "mold_breaker",
+        "name": "Mold Breaker",
+        "description": "Allows the user's moves to bypass or ignore defensive enemy abilities during damage and accuracy calculation.",
+        "effectId": "ability:mold_breaker"
+    },
+    "flash_fire": {
+        "id": "flash_fire",
+        "name": "Flash Fire",
+        "description": "Grants total immunity to FIRE-type attacks. When struck by FIRE, boosts damage output of next Fire move.",
+        "effectId": "ability:flash_fire"
+    },
+    "volt_absorb": {
+        "id": "volt_absorb",
+        "name": "Volt Absorb",
+        "description": "Grants total immunity to LIGHT-type attacks. When struck by LIGHT, heals 25% max HP instead.",
+        "effectId": "ability:volt_absorb"
+    },
+    "swift_swim": {
+        "id": "swift_swim",
+        "name": "Swift Swim",
+        "description": "Doubles raw Speed stat while weather is active on the field.",
+        "effectId": "ability:swift_swim"
+    },
+    "chlorophyll": {
+        "id": "chlorophyll",
+        "name": "Chlorophyll",
+        "description": "Doubles raw Speed stat while harsh sunlight weather is active.",
+        "effectId": "ability:chlorophyll"
+    }
+}

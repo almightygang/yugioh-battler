@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yu-Gi-Oh! Battler — Database Editor</title>
+<style>
+:root {
+  --bg: #1a1a2e; --surface: #16213e; --primary: #e94560; --accent: #0f3460;
+  --text: #eee; --text-dim: #999; --border: #333; --hover: #0f3460;
+  --danger: #e94560; --success: #4ecca3; --warn: #ffc107;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; }
+header { background: var(--surface); padding: 12px 20px; border-bottom: 2px solid var(--primary); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+header h1 { font-size: 18px; color: var(--primary); white-space: nowrap; }
+header .subtitle { color: var(--text-dim); font-size: 13px; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+.tab { padding: 8px 16px; border-radius: 6px 6px 0 0; cursor: pointer; font-size: 13px; background: var(--accent); color: var(--text-dim); border: none; transition: all .15s; }
+.tab:hover { background: var(--hover); color: var(--text); }
+.tab.active { background: var(--primary); color: #fff; font-weight: 600; }
+.tab .count { font-size: 11px; opacity: .7; margin-left: 4px; }
+.main { display: flex; flex: 1; overflow: hidden; }
+.sidebar { width: 280px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+.sidebar-header { padding: 12px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; }
+.sidebar-header input { flex: 1; padding: 6px 10px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 13px; }
+.sidebar-header input:focus { outline: none; border-color: var(--primary); }
+.sidebar-header button { padding: 6px 12px; border-radius: 4px; border: none; cursor: pointer; font-size: 13px; background: var(--primary); color: #fff; white-space: nowrap; }
+.entry-list { flex: 1; overflow-y: auto; }
+.entry-item { padding: 10px 14px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .1s; }
+.entry-item:hover { background: var(--hover); }
+.entry-item.active { background: var(--accent); border-left: 3px solid var(--primary); }
+.entry-item .name { font-size: 14px; font-weight: 500; }
+.entry-item .meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+.editor { flex: 1; padding: 20px; overflow-y: auto; }
+.editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.editor-header h2 { font-size: 20px; }
+.editor-actions { display: flex; gap: 8px; }
+.btn { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-size: 13px; font-weight: 500; transition: all .15s; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { filter: brightness(1.15); }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { filter: brightness(1.15); }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { background: var(--hover); }
+.field-group { margin-bottom: 14px; }
+.field-group label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: .5px; }
+.field-group input, .field-group select, .field-group textarea {
+  width: 100%; padding: 8px 10px; border-radius: 4px; border: 1px solid var(--border);
+  background: var(--bg); color: var(--text); font-size: 14px; font-family: inherit;
+}
+.field-group input:focus, .field-group select:focus, .field-group textarea:focus { outline: none; border-color: var(--primary); }
+.field-group textarea { min-height: 60px; resize: vertical; }
+.field-group .hint { font-size: 11px; color: var(--text-dim); margin-top: 3px; }
+.field-group.inline { display: flex; gap: 8px; align-items: center; }
+.field-group.inline label { margin-bottom: 0; white-space: nowrap; }
+.field-group.inline input[type="checkbox"] { width: auto; }
+.nested-fields { margin-left: 16px; padding: 12px; border-left: 2px solid var(--accent); background: rgba(15,52,96,.15); border-radius: 0 4px 4px 0; }
+.nested-fields .nested-label { font-size: 12px; color: var(--primary); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .5px; }
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; color: var(--text-dim); padding: 40px; text-align: center; }
+.empty-state h3 { font-size: 22px; margin-bottom: 8px; color: var(--text); }
+.empty-state p { font-size: 14px; max-width: 400px; }
+.array-field { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 0; }
+.array-tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 12px; background: var(--accent); font-size: 12px; }
+.array-tag .remove { cursor: pointer; color: var(--danger); font-weight: bold; font-size: 14px; }
+.array-input { display: flex; gap: 4px; margin-top: 4px; }
+.array-input select { flex: 1; padding: 6px 8px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 13px; }
+.array-input .btn-add { padding: 6px 12px; border-radius: 4px; border: none; cursor: pointer; background: var(--accent); color: var(--text); font-size: 13px; }
+.toast { position: fixed; bottom: 20px; right: 20px; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 1000; animation: slideIn .3s ease; }
+.toast.success { background: var(--success); color: #000; }
+.toast.error { background: var(--danger); color: #fff; }
+.toast.info { background: var(--accent); color: var(--text); }
+@keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.loading { text-align: center; padding: 40px; color: var(--text-dim); font-size: 16px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Database Editor</h1>
+  <span class="subtitle">Yu-Gi-Oh! Battler</span>
+  <div class="tabs" id="tabs"></div>
+</header>
+
+<div class="main">
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <input type="text" id="searchInput" placeholder="Search entries..." oninput="renderEntryList()">
+      <button onclick="createEntry()">+ New</button>
+    </div>
+    <div class="entry-list" id="entryList"></div>
+  </div>
+
+  <div class="editor" id="editor">
+    <div class="empty-state" id="emptyState">
+      <h3 id="emptyTitle">Select an entry</h3>
+      <p id="emptyDesc">Choose a database tab above, then select an entry from the list to edit it, or click <strong>+ New</strong> to create one.</p>
+    </div>
+    <div id="editorContent" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────
+let databases = [];
+let schemas = {};
+let currentDb = null;
+let entries = [];
+let selectedEntryId = null;
+let editingData = null;
+
+// ── API ────────────────────────────────────────────────────────────
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, {
+    headers: { 'Content-Type': 'application/json' },
+    ...opts,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error(err.error || res.statusText);
+  }
+  return res.json();
+}
+
+// ── Toast ──────────────────────────────────────────────────────────
+
+function toast(msg, type = 'info') {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+// ── Init ───────────────────────────────────────────────────────────
+
+async function init() {
+  try {
+    document.getElementById('emptyTitle').textContent = 'Loading...';
+    document.getElementById('emptyDesc').textContent = 'Fetching database schemas...';
+    const [dbs, schemaData] = await Promise.all([
+      api('/api/databases'),
+      api('/api/schema'),
+    ]);
+    databases = dbs;
+    schemas = schemaData;
+    renderTabs();
+    if (databases.length > 0) selectDb(databases[0].name);
+  } catch (e) {
+    document.getElementById('emptyTitle').textContent = 'Connection Error';
+    document.getElementById('emptyDesc').textContent = `Could not reach the server: ${e.message}`;
+  }
+}
+
+// ── Tabs ───────────────────────────────────────────────────────────
+
+function renderTabs() {
+  const container = document.getElementById('tabs');
+  container.innerHTML = databases.map(db => `
+    <button class="tab ${currentDb === db.name ? 'active' : ''}" onclick="selectDb('${db.name}')">
+      ${db.name} <span class="count">(${db.count})</span>
+    </button>
+  `).join('');
+}
+
+function selectDb(name) {
+  currentDb = name;
+  selectedEntryId = null;
+  editingData = null;
+  showEmptyState();
+  renderTabs();
+  loadEntries();
+}
+
+async function loadEntries() {
+  const data = await api(`/api/databases/${currentDb}`);
+  entries = data.entries;
+  renderEntryList();
+}
+
+// ── Entry List ─────────────────────────────────────────────────────
+
+function renderEntryList() {
+  const q = (document.getElementById('searchInput').value || '').toLowerCase();
+  const filtered = entries.filter(e => e.id.toLowerCase().includes(q) || (e.name || '').toLowerCase().includes(q));
+  const list = document.getElementById('entryList');
+  list.innerHTML = filtered.map(e => `
+    <div class="entry-item ${selectedEntryId === e.id ? 'active' : ''}" onclick="selectEntry('${e.id.replace(/'/g, "\\'")}')">
+      <div class="name">${esc(e.name || e.id)}</div>
+      <div class="meta">${esc(e.id)}</div>
+    </div>
+  `).join('');
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── Editor ─────────────────────────────────────────────────────────
+
+async function selectEntry(id) {
+  selectedEntryId = id;
+  renderEntryList();
+  editingData = await api(`/api/databases/${currentDb}/${encodeURIComponent(id)}`);
+  renderEditor();
+}
+
+function showEmptyState() {
+  document.getElementById('emptyState').style.display = '';
+  document.getElementById('editorContent').style.display = 'none';
+}
+
+function renderEditor() {
+  if (!editingData) return;
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('editorContent').style.display = '';
+
+  const schema = schemas[currentDb] || [];
+  const container = document.getElementById('editorContent');
+
+  container.innerHTML = `
+    <div class="editor-header">
+      <h2>${esc(editingData.name || selectedEntryId)}</h2>
+      <div class="editor-actions">
+        <button class="btn btn-primary" onclick="saveCurrentEntry()">Save</button>
+        <button class="btn btn-outline" onclick="revertEntry()">Revert</button>
+        <button class="btn btn-danger" onclick="deleteEntry()">Delete</button>
+      </div>
+    </div>
+    ${schema.map(f => renderField(f, editingData, '')).join('')}
+  `;
+}
+
+function renderField(field, data, prefix) {
+  const key = field.key;
+  const val = data[key];
+  const fullKey = prefix ? `${prefix}.${key}` : key;
+  const idAttr = `field-${fullKey.replace(/\./g, '-')}`;
+
+  let html = '';
+
+  if (field.type === 'object') {
+    const sub = val || {};
+    html = `<div class="field-group">
+      <label>${field.label || field.key}</label>
+      <div class="nested-fields">
+        <div class="nested-label">${field.label || field.key}</div>
+        ${(field.fields || []).map(f => renderField(f, sub, fullKey)).join('')}
+      </div>
+    </div>`;
+  } else if (field.type === 'boolean') {
+    html = `<div class="field-group inline">
+      <input type="checkbox" id="${idAttr}" ${val ? 'checked' : ''} onchange="updateField('${fullKey}', this.checked)">
+      <label for="${idAttr}">${field.label || field.key}</label>
+    </div>`;
+  } else if (field.type === 'enum') {
+    html = `<div class="field-group">
+      <label for="${idAttr}">${field.label || field.key}</label>
+      <select id="${idAttr}" onchange="updateField('${fullKey}', this.value)">
+        <option value="">—</option>
+        ${(field.values || []).map(v => `<option ${val === v ? 'selected' : ''}>${esc(v)}</option>`).join('')}
+      </select>
+    </div>`;
+  } else if (field.type === 'string[]') {
+    const arr = val || [];
+    html = `<div class="field-group">
+      <label>${field.label || field.key}</label>
+      <div class="array-field" id="array-${fullKey.replace(/\./g, '-')}">
+        ${arr.map((item, i) => `<span class="array-tag">${esc(item)} <span class="remove" onclick="removeArrayItem('${fullKey}', ${i})">&times;</span></span>`).join('')}
+      </div>
+      <div class="array-input">
+        ${field.values && field.values.length > 0
+          ? `<select id="array-select-${fullKey.replace(/\./g, '-')}">${field.values.map(v => `<option>${esc(v)}</option>`).join('')}</select>`
+          : `<input type="text" id="array-input-${fullKey.replace(/\./g, '-')}" placeholder="Add item..." onkeydown="if(event.key==='Enter')addArrayItem('${fullKey}')">`
+        }
+        <button class="btn-add" onclick="addArrayItem('${fullKey}')">Add</button>
+      </div>
+    </div>`;
+  } else if (field.type === 'number') {
+    html = `<div class="field-group">
+      <label for="${idAttr}">${field.label || field.key}</label>
+      <input type="number" id="${idAttr}" value="${val !== undefined && val !== null ? val : ''}" onchange="updateField('${fullKey}', Number(this.value))">
+    </div>`;
+  } else {
+    const multiline = key === 'description' || key === 'effectId';
+    html = `<div class="field-group">
+      <label for="${idAttr}">${field.label || field.key}</label>
+      ${multiline
+        ? `<textarea id="${idAttr}" onchange="updateField('${fullKey}', this.value)">${(val || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>`
+        : `<input type="text" id="${idAttr}" value="${(val || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}" onchange="updateField('${fullKey}', this.value)">`
+      }
+    </div>`;
+  }
+
+  return html;
+}
+
+// ── Field Updates ─────────────────────────────────────────────────
+
+function getNested(obj, path) {
+  return path.split('.').reduce((o, p) => (o !== undefined && o !== null ? o[p] : undefined), obj);
+}
+
+function setNested(obj, path, value) {
+  const parts = path.split('.');
+  let current = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (current[parts[i]] === undefined || current[parts[i]] === null) current[parts[i]] = {};
+    current = current[parts[i]];
+  }
+  current[parts[parts.length - 1]] = value;
+}
+
+function updateField(path, value) {
+  setNested(editingData, path, value);
+}
+
+function addArrayItem(fullKey) {
+  const schema = schemas[currentDb] || [];
+  const parts = fullKey.split('.');
+  let field = schema.find(f => f.key === parts[0]);
+  for (let i = 1; i < parts.length && field && field.fields; i++) {
+    field = field.fields.find(f => f.key === parts[i]);
+  }
+  const hasEnumValues = field && field.values && field.values.length > 0;
+  const safeKey = fullKey.replace(/\./g, '-');
+
+  let val;
+  if (hasEnumValues) {
+    const sel = document.getElementById(`array-select-${safeKey}`);
+    if (!sel) return;
+    val = sel.value;
+  } else {
+    const inp = document.getElementById(`array-input-${safeKey}`);
+    if (!inp || !inp.value.trim()) return;
+    val = inp.value.trim();
+    inp.value = '';
+  }
+
+  const arr = getNested(editingData, fullKey) || [];
+  arr.push(val);
+  setNested(editingData, fullKey, arr);
+  renderEditor();
+}
+
+function removeArrayItem(fullKey, index) {
+  const arr = getNested(editingData, fullKey) || [];
+  arr.splice(index, 1);
+  setNested(editingData, fullKey, arr);
+  renderEditor();
+}
+
+// ── CRUD Actions ──────────────────────────────────────────────────
+
+function saveCurrentEntry() {
+  if (!selectedEntryId) saveNewEntry();
+  else saveEntry();
+}
+
+async function saveEntry() {
+  try {
+    await api(`/api/databases/${currentDb}/${encodeURIComponent(selectedEntryId)}`, {
+      method: 'PUT',
+      body: JSON.stringify(editingData),
+    });
+    toast('Saved successfully', 'success');
+    await loadEntries();
+  } catch (e) {
+    toast(e.message, 'error');
+  }
+}
+
+async function deleteEntry() {
+  if (!confirm(`Delete "${selectedEntryId}"?`)) return;
+  try {
+    await api(`/api/databases/${currentDb}/${encodeURIComponent(selectedEntryId)}`, { method: 'DELETE' });
+    toast('Deleted', 'info');
+    selectedEntryId = null;
+    editingData = null;
+    showEmptyState();
+    await loadEntries();
+  } catch (e) {
+    toast(e.message, 'error');
+  }
+}
+
+async function revertEntry() {
+  if (selectedEntryId) {
+    editingData = await api(`/api/databases/${currentDb}/${encodeURIComponent(selectedEntryId)}`);
+    renderEditor();
+    toast('Reverted to saved', 'info');
+  }
+}
+
+function createEntry() {
+  const schema = schemas[currentDb] || [];
+  const newEntry = {};
+  for (const f of schema) {
+    if (f.type === 'object') {
+      newEntry[f.key] = {};
+      if (f.fields) for (const sf of f.fields) {
+        newEntry[f.key][sf.key] = sf.type === 'number' ? 0 : sf.type === 'boolean' ? false : sf.type === 'string[]' ? [] : '';
+      }
+    } else if (f.type === 'number') {
+      newEntry[f.key] = 0;
+    } else if (f.type === 'boolean') {
+      newEntry[f.key] = false;
+    } else if (f.type === 'string[]') {
+      newEntry[f.key] = [];
+    } else {
+      newEntry[f.key] = '';
+    }
+  }
+  editingData = newEntry;
+  selectedEntryId = null;
+  renderEntryList();
+  renderEditor();
+  setTimeout(() => {
+    const idField = document.getElementById('field-id');
+    if (idField) idField.focus();
+  }, 50);
+}
+
+async function saveNewEntry() {
+  try {
+    const result = await api(`/api/databases/${currentDb}`, {
+      method: 'POST',
+      body: JSON.stringify(editingData),
+    });
+    toast('Created successfully', 'success');
+    selectedEntryId = result.id;
+    await loadEntries();
+    editingData = await api(`/api/databases/${currentDb}/${encodeURIComponent(result.id)}`);
+    renderEditor();
+  } catch (e) {
+    toast(e.message, 'error');
+  }
+}
+
+// ── Keyboard shortcuts ─────────────────────────────────────────────
+
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    saveCurrentEntry();
+  }
+});
+
+// ── Start ──────────────────────────────────────────────────────────
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+{
+  "player": {
+    "name": "Duelist",
+    "currency": 0,
+    "monsterVault": [
+      {
+        "monsterId": "megalith_sentry",
+        "level": 100
+      },
+      {
+        "monsterId": "the_setter",
+        "level": 100
+      }
+    ],
+    "itemVault": [
+      "ancient_rules",
+      "revival_ring",
+      "life_amulet",
+      "choice_band",
+      "choice_specs",
+      "choice_scarf",
+      "focus_sash",
+      "life_orb",
+      "leftovers",
+      "expert_belt",
+      "assault_vest",
+      "heavy_duty_boots",
+      "rocky_helmet",
+      "eject_button",
+      "air_balloon",
+      "sitrus_berry",
+      "mental_herb",
+      "iron_ball",
+      "flame_orb",
+      "toxic_orb",
+      "lagging_tail",
+      "white_herb",
+      "black_sludge"
+    ],
+    "teams": [
+      {
+        "name": "Team 1",
+        "slots": [
+          {
+            "monsterVaultIndex": 1
+          },
+          {
+            "monsterVaultIndex": 0
+          },
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Team 2",
+        "slots": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Team 3",
+        "slots": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Team 4",
+        "slots": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Team 5",
+        "slots": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Team 6",
+        "slots": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Team 7",
+        "slots": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Team 8",
+        "slots": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Team 9",
+        "slots": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "name": "Team 10",
+        "slots": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    ],
+    "unlockedTeamSlots": 10,
+    "packsOpened": 2
+  },
+  "saveVersion": 1
+}

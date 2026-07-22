@@ -1,0 +1,530 @@
+{
+  "ability:beacon_of_white": {
+    "id": "ability:beacon_of_white",
+    "name": "Beacon Of White",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:eyes_of_blue": {
+    "id": "ability:eyes_of_blue",
+    "name": "Eyes Of Blue",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:graveyard_king": {
+    "id": "ability:graveyard_king",
+    "name": "Graveyard King",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:zombie_lord": {
+    "id": "ability:zombie_lord",
+    "name": "Zombie Lord",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:intimidate": {
+    "id": "ability:intimidate",
+    "name": "Intimidate",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:regenerator": {
+    "id": "ability:regenerator",
+    "name": "Regenerator",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:levitate": {
+    "id": "ability:levitate",
+    "name": "Levitate",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:prankster": {
+    "id": "ability:prankster",
+    "name": "Prankster",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:guts": {
+    "id": "ability:guts",
+    "name": "Guts",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:sturdy": {
+    "id": "ability:sturdy",
+    "name": "Sturdy",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:serene_grace": {
+    "id": "ability:serene_grace",
+    "name": "Serene Grace",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:mold_breaker": {
+    "id": "ability:mold_breaker",
+    "name": "Mold Breaker",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:flash_fire": {
+    "id": "ability:flash_fire",
+    "name": "Flash Fire",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:volt_absorb": {
+    "id": "ability:volt_absorb",
+    "name": "Volt Absorb",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:swift_swim": {
+    "id": "ability:swift_swim",
+    "name": "Swift Swim",
+    "description": "",
+    "effectType": "ability"
+  },
+  "ability:chlorophyll": {
+    "id": "ability:chlorophyll",
+    "name": "Chlorophyll",
+    "description": "",
+    "effectType": "ability"
+  },
+  "item:ancient_rules": {
+    "id": "item:ancient_rules",
+    "name": "Ancient Rules",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:revival_ring": {
+    "id": "item:revival_ring",
+    "name": "Revival Ring",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:life_amulet": {
+    "id": "item:life_amulet",
+    "name": "Life Amulet",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:choice_band": {
+    "id": "item:choice_band",
+    "name": "Choice Band",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:choice_specs": {
+    "id": "item:choice_specs",
+    "name": "Choice Specs",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:choice_scarf": {
+    "id": "item:choice_scarf",
+    "name": "Choice Scarf",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:focus_sash": {
+    "id": "item:focus_sash",
+    "name": "Focus Sash",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:life_orb": {
+    "id": "item:life_orb",
+    "name": "Life Orb",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:leftovers": {
+    "id": "item:leftovers",
+    "name": "Leftovers",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:expert_belt": {
+    "id": "item:expert_belt",
+    "name": "Expert Belt",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:assault_vest": {
+    "id": "item:assault_vest",
+    "name": "Assault Vest",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:heavy_duty_boots": {
+    "id": "item:heavy_duty_boots",
+    "name": "Heavy Duty Boots",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:rocky_helmet": {
+    "id": "item:rocky_helmet",
+    "name": "Rocky Helmet",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:eject_button": {
+    "id": "item:eject_button",
+    "name": "Eject Button",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:air_balloon": {
+    "id": "item:air_balloon",
+    "name": "Air Balloon",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:sitrus_berry": {
+    "id": "item:sitrus_berry",
+    "name": "Sitrus Berry",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:mental_herb": {
+    "id": "item:mental_herb",
+    "name": "Mental Herb",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:iron_ball": {
+    "id": "item:iron_ball",
+    "name": "Iron Ball",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:flame_orb": {
+    "id": "item:flame_orb",
+    "name": "Flame Orb",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:toxic_orb": {
+    "id": "item:toxic_orb",
+    "name": "Toxic Orb",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:lagging_tail": {
+    "id": "item:lagging_tail",
+    "name": "Lagging Tail",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:white_herb": {
+    "id": "item:white_herb",
+    "name": "White Herb",
+    "description": "",
+    "effectType": "item"
+  },
+  "item:black_sludge": {
+    "id": "item:black_sludge",
+    "name": "Black Sludge",
+    "description": "",
+    "effectType": "item"
+  },
+  "effect:alternative_burst": {
+    "id": "effect:alternative_burst",
+    "name": "Alternative Burst",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:burst_stream_of_destruction": {
+    "id": "effect:burst_stream_of_destruction",
+    "name": "Burst Stream Of Destruction",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:set_blinding_radiance": {
+    "id": "effect:set_blinding_radiance",
+    "name": "Set Blinding Radiance",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:dark_burst": {
+    "id": "effect:dark_burst",
+    "name": "Dark Burst",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:blinding_flash": {
+    "id": "effect:blinding_flash",
+    "name": "Blinding Flash",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:piercing_claw": {
+    "id": "effect:piercing_claw",
+    "name": "Piercing Claw",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:vital_light": {
+    "id": "effect:vital_light",
+    "name": "Vital Light",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:curse_web": {
+    "id": "effect:curse_web",
+    "name": "Curse Web",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:skill_crush": {
+    "id": "effect:skill_crush",
+    "name": "Skill Crush",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:charm_glow": {
+    "id": "effect:charm_glow",
+    "name": "Charm Glow",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:spectral_chain": {
+    "id": "effect:spectral_chain",
+    "name": "Spectral Chain",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:life_drain": {
+    "id": "effect:life_drain",
+    "name": "Life Drain",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:tether_bind": {
+    "id": "effect:tether_bind",
+    "name": "Tether Bind",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:revive_from_gy": {
+    "id": "effect:revive_from_gy",
+    "name": "Revive From Gy",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:banish_strike": {
+    "id": "effect:banish_strike",
+    "name": "Banish Strike",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:life_conversion_sacrifice": {
+    "id": "effect:life_conversion_sacrifice",
+    "name": "Life Conversion Sacrifice",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:life_conversion_heal": {
+    "id": "effect:life_conversion_heal",
+    "name": "Life Conversion Heal",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:set_zombie_world": {
+    "id": "effect:set_zombie_world",
+    "name": "Set Zombie World",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:set_megalith_portal": {
+    "id": "effect:set_megalith_portal",
+    "name": "Set Megalith Portal",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:knock_off": {
+    "id": "effect:knock_off",
+    "name": "Knock Off",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:sucker_punch": {
+    "id": "effect:sucker_punch",
+    "name": "Sucker Punch",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:dark_pulse": {
+    "id": "effect:dark_pulse",
+    "name": "Dark Pulse",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:shadow_ball": {
+    "id": "effect:shadow_ball",
+    "name": "Shadow Ball",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:taunt": {
+    "id": "effect:taunt",
+    "name": "Taunt",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:play_rough": {
+    "id": "effect:play_rough",
+    "name": "Play Rough",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:zen_headbutt": {
+    "id": "effect:zen_headbutt",
+    "name": "Zen Headbutt",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:dazzling_gleam": {
+    "id": "effect:dazzling_gleam",
+    "name": "Dazzling Gleam",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:luster_purge": {
+    "id": "effect:luster_purge",
+    "name": "Luster Purge",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:light_screen": {
+    "id": "effect:light_screen",
+    "name": "Light Screen",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:brave_bird": {
+    "id": "effect:brave_bird",
+    "name": "Brave Bird",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:dual_wingbeat": {
+    "id": "effect:dual_wingbeat",
+    "name": "Dual Wingbeat",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:hurricane": {
+    "id": "effect:hurricane",
+    "name": "Hurricane",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:air_slash": {
+    "id": "effect:air_slash",
+    "name": "Air Slash",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:tailwind": {
+    "id": "effect:tailwind",
+    "name": "Tailwind",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:earthquake": {
+    "id": "effect:earthquake",
+    "name": "Earthquake",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:stone_edge": {
+    "id": "effect:stone_edge",
+    "name": "Stone Edge",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:earth_power": {
+    "id": "effect:earth_power",
+    "name": "Earth Power",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:flash_cannon": {
+    "id": "effect:flash_cannon",
+    "name": "Flash Cannon",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:stealth_rock": {
+    "id": "effect:stealth_rock",
+    "name": "Stealth Rock",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:flare_blitz": {
+    "id": "effect:flare_blitz",
+    "name": "Flare Blitz",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:fire_punch": {
+    "id": "effect:fire_punch",
+    "name": "Fire Punch",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:flamethrower": {
+    "id": "effect:flamethrower",
+    "name": "Flamethrower",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:fire_blast": {
+    "id": "effect:fire_blast",
+    "name": "Fire Blast",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:will_o_wisp": {
+    "id": "effect:will_o_wisp",
+    "name": "Will O Wisp",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:ice_spinner": {
+    "id": "effect:ice_spinner",
+    "name": "Ice Spinner",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:wave_crash": {
+    "id": "effect:wave_crash",
+    "name": "Wave Crash",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:hydro_pump": {
+    "id": "effect:hydro_pump",
+    "name": "Hydro Pump",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:blizzard": {
+    "id": "effect:blizzard",
+    "name": "Blizzard",
+    "description": "",
+    "effectType": "move"
+  },
+  "effect:sunny_day": {
+    "id": "effect:sunny_day",
+    "name": "Sunny Day",
+    "description": "",
+    "effectType": "move"
+  }
+}

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yu-Gi-Oh! Battler</title>
+<style>
+:root{--bg:#1a1a2e;--surface:#16213e;--primary:#e94560;--accent:#0f3460;--text:#eee;--text-dim:#999;--border:#333;--hover:#0f3460;--success:#4ecca3;--danger:#e94560;--gold:#ffd700}
+/* Collection */
+.col-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+.col-card{background:var(--surface);border-radius:10px;border:1px solid var(--border);overflow:hidden;transition:all .15s;cursor:default}
+.col-card:hover{border-color:var(--primary);transform:translateY(-2px)}
+.col-card .sprite-wrap{width:100%;aspect-ratio:1;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px}
+.col-card .sprite-wrap img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated}
+.col-card .sprite-wrap .fallback{font-size:48px;opacity:.3}
+.col-card .info{padding:12px}
+.col-card .info .name{font-size:14px;font-weight:600}
+.col-card .info .level{font-size:12px;color:var(--text-dim);margin-top:2px}
+.col-card .info .tags{margin-top:6px;display:flex;flex-wrap:wrap;gap:3px}
+.col-card .info .tags .tag{padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600;text-transform:uppercase}
+.tag-light{background:#ffd70033;color:#ffd700}
+.tag-dark{background:#9400d333;color:#da70d6}
+.tag-fire{background:#ff450033;color:#ff6347}
+.tag-water{background:#1e90ff33;color:#87ceeb}
+.tag-earth{background:#8b451333;color:#deb887}
+.tag-wind{background:#3cb37133;color:#98fb98}
+.tag-normal{background:#80808033;color:#d3d3d3}
+/* Modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:1000}
+.modal{background:var(--surface);border-radius:12px;padding:24px;max-width:480px;width:90%;max-height:80vh;overflow-y:auto}
+.modal h2{font-size:20px;margin-bottom:4px}
+.modal .subtitle{color:var(--text-dim);font-size:13px;margin-bottom:16px}
+.modal .stat-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px}
+.modal .stat-row:last-child{border-bottom:none}
+.modal .stat-row .label{color:var(--text-dim)}
+.modal .stat-row .value{font-weight:600}
+.modal .stat-row .value.high{color:var(--success)}
+.modal .stat-row .value.mid{color:var(--gold)}
+.modal .stat-row .value.low{color:var(--danger)}
+.modal .tags{margin:8px 0;display:flex;flex-wrap:wrap;gap:4px}
+.modal .sprite-large{width:120px;height:120px;background:var(--bg);border-radius:8px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.modal .sprite-large img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated}
+.modal .sprite-large .fallback{font-size:64px;opacity:.3}
+.modal .learnset{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.modal .learnset .move{padding:3px 8px;border-radius:4px;background:var(--accent);font-size:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column}
+header{background:var(--surface);padding:12px 20px;border-bottom:3px solid var(--primary);display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+header h1{font-size:20px;color:var(--primary)}
+.nav{display:flex;gap:2px;margin-left:auto}
+.nav a{padding:8px 16px;text-decoration:none;color:var(--text-dim);font-size:14px;border-radius:6px 6px 0 0;transition:all .15s;background:var(--accent)}
+.nav a:hover{background:var(--hover);color:var(--text)}
+.nav a.active{background:var(--primary);color:#fff;font-weight:600}
+.main{flex:1;overflow-y:auto;padding:20px;max-width:1200px;margin:0 auto;width:100%}
+.hidden{display:none!important}
+.btn{padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:500;transition:all .15s}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{filter:brightness(1.15)}
+.btn-success{background:var(--success);color:#000}
+.btn-success:hover{filter:brightness(1.15)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-outline:hover{background:var(--hover)}
+.btn-sm{padding:4px 10px;font-size:12px}
+.card{background:var(--surface);border-radius:8px;padding:16px;border:1px solid var(--border)}
+.card:hover{border-color:var(--accent)}
+.grid{display:grid;gap:12px}
+.grid-2{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.grid-3{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.grid-4{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.badge-el{background:var(--accent);color:var(--text);margin:1px}
+.text-dim{color:var(--text-dim)}
+.text-gold{color:var(--gold)}
+.text-success{color:var(--success)}
+.text-danger{color:var(--danger)}
+.mt-8{margin-top:8px}
+.mt-16{margin-top:16px}
+.mb-8{margin-bottom:8px}
+.mb-16{margin-bottom:16px}
+.flex{display:flex;gap:8px;align-items:center}
+.flex-wrap{flex-wrap:wrap}
+.gap-16{gap:16px}
+/* Hub */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.stat-card{text-align:center;padding:20px}
+.stat-card .num{font-size:28px;font-weight:700;color:var(--primary)}
+.stat-card .lbl{font-size:12px;color:var(--text-dim);margin-top:4px}
+/* Team Builder */
+.tb-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;height:calc(100vh-160px);min-height:500px}
+.tb-left,.tb-right{overflow-y:auto}
+.team-selector{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px}
+.team-tab{padding:6px 14px;border-radius:4px;cursor:pointer;font-size:13px;background:var(--accent);color:var(--text-dim);border:none}
+.team-tab.active{background:var(--primary);color:#fff;font-weight:600}
+.team-tab .copy{font-size:10px;margin-left:4px;cursor:pointer;opacity:.6}
+.team-tab .copy:hover{opacity:1}
+.slot-grid{display:grid;gap:8px}
+.slot-grid.active{grid-template-columns:repeat(3,1fr)}
+.slot-grid.bench{grid-template-columns:repeat(3,1fr);margin-top:8px;opacity:.8}
+.slot-card{padding:10px;border-radius:6px;background:var(--bg);border:2px solid var(--border);cursor:pointer;transition:all .15s;min-height:110px;position:relative}
+.slot-card:hover{border-color:var(--accent)}
+.slot-card.selected{border-color:var(--primary);background:rgba(233,69,96,.1)}
+.slot-card .pos{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text-dim);position:absolute;top:6px;left:8px}
+.slot-card .pos.active{color:var(--primary)}
+.slot-card .slot-sprite{width:48px;height:48px;margin:6px auto 2px;display:flex;align-items:center;justify-content:center}
+.slot-card .slot-sprite img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated}
+.slot-card .slot-sprite .fallback{font-size:22px;opacity:.3}
+.slot-card .mon-name{font-size:13px;font-weight:600;text-align:center}
+.slot-card .mon-level{font-size:11px;color:var(--text-dim);text-align:center}
+.slot-card .item-row{display:flex;align-items:center;gap:4px;justify-content:center;margin-top:4px}
+.slot-card .item-row .item-sprite{width:16px;height:16px;flex-shrink:0}
+.slot-card .item-row .item-sprite img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated}
+.slot-card .item-row .item-sprite .fallback{font-size:10px;opacity:.3}
+.slot-card .item-badge{font-size:10px;background:var(--accent);padding:1px 5px;border-radius:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px}
+.slot-card.empty .mon-name{color:var(--text-dim);font-style:italic}
+.section-label{font-size:13px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin:12px 0 6px}
+.vault-tabs{display:flex;gap:4px;margin-bottom:12px}
+.vault-tab{padding:6px 14px;border-radius:4px;cursor:pointer;font-size:13px;background:var(--accent);color:var(--text-dim);border:none}
+.vault-tab.active{background:var(--primary);color:#fff;font-weight:600}
+.vault-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.vault-item{padding:10px;border-radius:6px;background:var(--bg);border:1px solid var(--border);cursor:pointer;text-align:center;transition:all .15s}
+.vault-item:hover{border-color:var(--accent)}
+.vault-item .vault-sprite{width:48px;height:48px;margin:0 auto 4px;display:flex;align-items:center;justify-content:center}
+.vault-item .vault-sprite img{max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated}
+.vault-item .vault-sprite .fallback{font-size:22px;opacity:.3}
+.vault-item .name{font-size:13px;font-weight:500}
+.vault-item .detail{font-size:11px;color:var(--text-dim);margin-top:2px}
+.vault-item .equip-badge{font-size:10px;color:var(--gold);margin-top:2px}
+.vault-item.equipped{border-color:var(--gold)}
+.vault-item.equipped-same{border-color:var(--danger);opacity:.5}
+/* Shop */
+.pack-card{padding:20px;text-align:center}
+.pack-card h3{font-size:18px;margin-bottom:6px}
+.pack-card .cost{font-size:24px;font-weight:700;color:var(--gold);margin:8px 0}
+.pack-card .desc{font-size:13px;color:var(--text-dim);margin-bottom:12px}
+.result-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:1000}
+.result-box{background:var(--surface);border-radius:12px;padding:30px;max-width:400px;width:90%;text-align:center}
+.result-box h2{color:var(--gold);margin-bottom:16px}
+.result-box .pulled{font-size:18px;margin:8px 0}
+.result-box .pulled.monster{color:var(--success);font-size:22px}
+.result-box .pulled.item{color:var(--primary)}
+/* Arena */
+.stage-card{padding:16px}
+.stage-card h3{font-size:16px}
+.stage-card .stars{color:var(--gold);font-size:14px}
+.stage-card .reward{font-size:14px;color:var(--gold);margin-top:4px}
+.battle-log{background:var(--bg);padding:12px;border-radius:6px;max-height:400px;overflow-y:auto;font-family:monospace;font-size:12px;line-height:1.6}
+.battle-log .line{padding:2px 0}
+.battle-log .dmg{color:var(--danger)}
+.battle-log .heal{color:var(--success)}
+.battle-log .sys{color:var(--text-dim)}
+.toast{position:fixed;bottom:20px;right:20px;padding:12px 20px;border-radius:8px;font-size:14px;z-index:2000;animation:slideIn .3s}
+.toast.success{background:var(--success);color:#000}
+.toast.error{background:var(--danger);color:#fff}
+.toast.info{background:var(--accent);color:var(--text)}
+@keyframes slideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>&#9888; Yu-Gi-Oh! Battler</h1>
+  <div class="nav" id="nav">
+    <a href="#hub" class="active">Hub</a>
+    <a href="#collection">Collection</a>
+    <a href="#teambuilder">Team Builder</a>
+    <a href="#shop">Shop</a>
+    <a href="#arena">Arena</a>
+  </div>
+</header>
+
+<div class="main" id="app"></div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────
+let profile = { name: 'Duelist', currency: 0, monsterCount: 0, itemCount: 0, teamCount: 10, packsOpened: 0 };
+let teams = [];
+let vault = { monsters: [], items: [], monsterVault: [], itemVault: [] };
+let currentTeamIndex = 0;
+let selectedSlot = -1;
+let vaultTab = 'monsters';
+let stages = [];
+let packs = [];
+
+// ── Helpers ────────────────────────────────────────────────────────
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...opts });
+  if (!res.ok) { const e = await res.json().catch(() => ({ error: res.statusText })); throw new Error(e.error || res.statusText); }
+  return res.json();
+}
+
+function toast(msg, type = 'info') {
+  const el = document.createElement('div'); el.className = `toast ${type}`; el.textContent = msg;
+  document.body.appendChild(el); setTimeout(() => el.remove(), 3000);
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── Router ─────────────────────────────────────────────────────────
+
+function navigate() {
+  const hash = (location.hash || '#hub').slice(1);
+  document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + hash));
+  renderPage(hash);
+}
+
+window.addEventListener('hashchange', navigate);
+window.addEventListener('load', navigate);
+
+// ── Page Renderer ──────────────────────────────────────────────────
+
+function renderPage(page) {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  if (page === 'hub') renderHub(app);
+  else if (page === 'collection') renderCollection(app);
+  else if (page === 'teambuilder') renderTeamBuilder(app);
+  else if (page === 'shop') renderShop(app);
+  else if (page === 'arena') renderArena(app);
+}
+
+// ── Hub ────────────────────────────────────────────────────────────
+
+async function renderHub(container) {
+  try { profile = await api('/api/game/profile'); } catch {}
+  container.innerHTML = `
+    <h2 class="mb-16">Game Hub</h2>
+    <div class="stats mb-16" id="hub-stats">
+      <div class="stat-card card"><div class="num">${profile.currency}</div><div class="lbl">Currency</div></div>
+      <div class="stat-card card"><div class="num">${profile.monsterCount}</div><div class="lbl">Monsters</div></div>
+      <div class="stat-card card"><div class="num">${profile.itemCount}</div><div class="lbl">Items</div></div>
+      <div class="stat-card card"><div class="num">${profile.teamCount}</div><div class="lbl">Teams</div></div>
+      <div class="stat-card card"><div class="num">${profile.packsOpened}</div><div class="lbl">Packs Opened</div></div>
+    </div>
+    <div class="grid grid-3">
+      <div class="card" style="cursor:pointer" onclick="location.hash='#shop'">
+        <h3>Shop</h3>
+        <p class="text-dim mt-8">Buy and open packs to collect monsters and items.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="location.hash='#teambuilder'">
+        <h3>Team Builder</h3>
+        <p class="text-dim mt-8">Build your battle teams from your collection.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="location.hash='#arena'">
+        <h3>Arena</h3>
+        <p class="text-dim mt-8">Battle NPC teams and earn currency.</p>
+      </div>
+    </div>
+  `;
+}
+
+// ── Team Builder ───────────────────────────────────────────────────
+
+async function renderTeamBuilder(container) {
+  try { teams = await api('/api/game/teams'); } catch { teams = []; }
+  try { vault = await api('/api/game/vault'); } catch { vault = { monsters: [], items: [], monsterVault: [], itemVault: [] }; }
+  if (currentTeamIndex >= teams.length) currentTeamIndex = 0;
+  selectedSlot = -1;
+
+  container.innerHTML = `
+    <div class="flex flex-wrap mb-8">
+      <h2>Team Builder</h2>
+      <div class="flex" style="margin-left:auto;gap:6px">
+        <span id="team-status" class="badge" style="font-size:12px;padding:4px 12px">Loading...</span>
+        <button class="btn btn-outline btn-sm" onclick="cloneCurrentTeam()">Clone</button>
+        <button class="btn btn-outline btn-sm" onclick="clearCurrentTeam()">Clear</button>
+        <button class="btn btn-outline btn-sm" onclick="saveCurrentTeam()">Save</button>
+      </div>
+    </div>
+
+    <div class="team-selector" id="team-selector"></div>
+
+    <div class="tb-layout">
+      <div class="tb-left">
+        <div class="section-label">Active Lineup</div>
+        <div class="slot-grid active" id="slots-active"></div>
+        <div class="section-label mt-16">Reserve Bench</div>
+        <div class="slot-grid bench" id="slots-bench"></div>
+      </div>
+
+      <div class="tb-right">
+        <div class="vault-tabs">
+          <button class="vault-tab active" onclick="switchVaultTab('monsters')">Monsters</button>
+          <button class="vault-tab" onclick="switchVaultTab('items')">Items</button>
+        </div>
+        <div id="vault-content"></div>
+      </div>
+    </div>
+  `;
+
+  renderTeamTabs();
+  renderSlots();
+  switchVaultTab(vaultTab);
+  updateTeamStatus();
+}
+
+function renderTeamTabs() {
+  const el = document.getElementById('team-selector');
+  if (!el) return;
+  el.innerHTML = teams.map((t, i) => `
+    <button class="team-tab ${i === currentTeamIndex ? 'active' : ''}" onclick="selectTeam(${i})">
+      ${esc(t.name)}
+    </button>
+  `).join('');
+}
+
+function renderSlots() {
+  const team = teams[currentTeamIndex];
+  if (!team) return;
+  const labels = ['L', 'C', 'R', 'B1', 'B2', 'B3'];
+  const sections = ['slots-active', 'slots-bench'];
+
+  for (let si = 0; si < 2; si++) {
+    const el = document.getElementById(sections[si]);
+    if (!el) continue;
+    el.innerHTML = '';
+    for (let i = si * 3; i < si * 3 + 3; i++) {
+      const sd = team.slots[i];
+      const mon = sd !== null ? (vault.monsters[sd.monsterVaultIndex] || null) : null;
+      const itemId = sd?.itemId || null;
+      const itemName = itemId ? (vault.items.find(x => x.id === itemId)?.name || itemId) : null;
+
+      const card = document.createElement('div');
+      card.className = `slot-card ${mon ? '' : 'empty'} ${selectedSlot === i ? 'selected' : ''}`;
+      card.onclick = () => { selectedSlot = i; renderSlots(); renderVault(); };
+      if (mon) {
+        card.innerHTML = `
+          <div class="pos ${si === 0 ? 'active' : ''}">${labels[i]}</div>
+          <div class="slot-sprite">
+            <img src="/images/monsters/${mon.id}.png" alt="${esc(mon.name)}"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="fallback" style="display:none">?</div>
+          </div>
+          <div class="mon-name">${esc(mon.name)}</div>
+          <div class="mon-level">Lv.${mon.level}</div>
+          ${itemName ? `<div class="item-row">
+            <div class="item-sprite">
+              <img src="/images/items/${itemId}.png" alt="${esc(itemName)}"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="fallback" style="display:none">?</div>
+            </div>
+            <span class="item-badge">${esc(itemName)}</span>
+          </div>` : ''}
+        `;
+      } else {
+        card.innerHTML = `
+          <div class="pos ${si === 0 ? 'active' : ''}">${labels[i]}</div>
+          <div class="mon-name">Empty</div>
+        `;
+      }
+      el.appendChild(card);
+    }
+  }
+}
+
+function renderVault() {
+  const el = document.getElementById('vault-content');
+  if (!el) return;
+
+  if (vaultTab === 'monsters') {
+    const usedIndices = new Set(teams[currentTeamIndex]?.slots.filter(s => s !== null).map(s => s.monsterVaultIndex) || []);
+    el.innerHTML = `<div class="vault-grid">${vault.monsters.map((m, i) => {
+      const used = usedIndices.has(i);
+      return `<div class="vault-item ${used ? 'equipped-same' : ''}" onclick="${used ? `showMonsterDetail('${m.id}')` : `assignMonster(${i})`}">
+        <div class="vault-sprite">
+          <img src="/images/monsters/${m.id}.png" alt="${esc(m.name)}"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="fallback" style="display:none">?</div>
+        </div>
+        <div class="name">${esc(m.name)}</div>
+        <div class="detail">Lv.${m.level} ${used ? '(in use)' : ''}</div>
+      </div>`;
+    }).join('')}</div>`;
+  } else {
+    const team = teams[currentTeamIndex];
+    const usedItems = new Set(team?.slots.filter(s => s?.itemId).map(s => s.itemId) || []);
+    el.innerHTML = `<div class="vault-grid">${vault.items.map(item => {
+      const equipped = usedItems.has(item.id);
+      return `<div class="vault-item ${equipped ? 'equipped' : ''}" onclick="${equipped ? '' : `equipItem('${item.id}')`}">
+        <div class="vault-sprite">
+          <img src="/images/items/${item.id}.png" alt="${esc(item.name)}"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="fallback" style="display:none">?</div>
+        </div>
+        <div class="name">${esc(item.name)}</div>
+        <div class="detail">${equipped ? 'Equipped' : item.id}</div>
+      </div>`;
+    }).join('')}</div>`;
+  }
+}
+
+function switchVaultTab(tab) {
+  vaultTab = tab;
+  document.querySelectorAll('.vault-tab').forEach(el => el.classList.toggle('active', el.textContent.toLowerCase().startsWith(tab)));
+  renderVault();
+}
+
+function selectTeam(idx) {
+  currentTeamIndex = idx;
+  selectedSlot = -1;
+  renderTeamTabs();
+  renderSlots();
+  renderVault();
+  updateTeamStatus();
+}
+
+function assignMonster(vaultIndex) {
+  if (selectedSlot < 0) { toast('Select a slot first', 'info'); return; }
+  const team = teams[currentTeamIndex];
+  if (!team) return;
+  // Check if monster already assigned
+  for (let i = 0; i < team.slots.length; i++) {
+    if (team.slots[i]?.monsterVaultIndex === vaultIndex) {
+      // Remove from old slot
+      if (i !== selectedSlot) {
+        team.slots[i] = null;
+      } else {
+        toast('Already in this slot', 'info');
+        return;
+      }
+    }
+  }
+  team.slots[selectedSlot] = { monsterVaultIndex: vaultIndex, itemId: team.slots[selectedSlot]?.itemId };
+  renderSlots();
+  renderVault();
+  updateTeamStatus();
+}
+
+function equipItem(itemId) {
+  if (selectedSlot < 0) { toast('Select a slot first', 'info'); return; }
+  const team = teams[currentTeamIndex];
+  if (!team) return;
+  if (!team.slots[selectedSlot]) { toast('Assign a monster first', 'info'); return; }
+
+  // Check unique item clause
+  for (let i = 0; i < team.slots.length; i++) {
+    if (i !== selectedSlot && team.slots[i]?.itemId === itemId) {
+      toast('Item already equipped on another slot', 'error');
+      return;
+    }
+  }
+
+  team.slots[selectedSlot].itemId = team.slots[selectedSlot].itemId === itemId ? undefined : itemId;
+  renderSlots();
+  renderVault();
+  updateTeamStatus();
+}
+
+function updateTeamStatus() {
+  const status = document.getElementById('team-status');
+  if (!status) return;
+  const team = teams[currentTeamIndex];
+  if (!team) { status.textContent = 'No team'; status.style.background = 'var(--text-dim)'; return; }
+
+  const active = team.slots.slice(0, 3);
+  const filledActive = active.filter(s => s !== null);
+  const usedItems = new Set(team.slots.filter(s => s?.itemId).map(s => s.itemId));
+
+  if (filledActive.length < 3) {
+    status.textContent = `Incomplete (${filledActive.length}/3 active)`;
+    status.style.background = 'var(--danger)';
+  } else if (usedItems.size < team.slots.filter(s => s?.itemId).length) {
+    status.textContent = 'Duplicate items!';
+    status.style.background = 'var(--danger)';
+  } else {
+    status.textContent = 'Battle Ready!';
+    status.style.background = 'var(--success)';
+    status.style.color = '#000';
+  }
+}
+
+async function saveCurrentTeam() {
+  try {
+    const team = teams[currentTeamIndex];
+    await api(`/api/game/teams/${currentTeamIndex}`, { method: 'PUT', body: JSON.stringify(team) });
+    toast('Team saved', 'success');
+  } catch (e) { toast(e.message, 'error'); }
+}
+
+async function cloneCurrentTeam() {
+  try {
+    await api(`/api/game/teams/${currentTeamIndex}/clone`, { method: 'POST' });
+    teams = await api('/api/game/teams');
+    renderTeamTabs();
+    toast('Team cloned', 'success');
+  } catch (e) { toast(e.message, 'error'); }
+}
+
+async function clearCurrentTeam() {
+  if (!confirm('Clear this team?')) return;
+  try {
+    await api(`/api/game/teams/${currentTeamIndex}/clear`, { method: 'POST' });
+    teams = await api('/api/game/teams');
+    renderSlots();
+    renderVault();
+    updateTeamStatus();
+    toast('Team cleared', 'info');
+  } catch (e) { toast(e.message, 'error'); }
+}
+
+// ── Shop ───────────────────────────────────────────────────────────
+
+async function renderShop(container) {
+  try { profile = await api('/api/game/profile'); } catch {}
+  try { packs = await api('/api/game/packs'); } catch { packs = []; }
+  try { vault = await api('/api/game/vault'); } catch {}
+
+  container.innerHTML = `
+    <div class="flex flex-wrap mb-16">
+      <h2>Shop</h2>
+      <div class="text-gold" style="margin-left:auto;font-size:18px;font-weight:700">&#9733; ${profile.currency}</div>
+    </div>
+    <div class="grid grid-2" id="pack-list">
+      ${packs.map(p => `
+        <div class="pack-card card">
+          <h3>${esc(p.name)}</h3>
+          <div class="cost">&#9733; ${p.cost}</div>
+          <div class="desc">${esc(p.description)}</div>
+          <button class="btn btn-primary" onclick="openPack('${p.id}')">Open Pack</button>
+        </div>
+      `).join('')}
+    </div>
+    <div class="section-label mt-16 mb-8">Your Monsters (${vault.monsters?.length || 0})</div>
+    <div class="flex flex-wrap">${(vault.monsters || []).slice(0, 50).map(m =>
+      `<span class="badge badge-el" style="cursor:pointer" onclick="showMonsterDetail('${m.id}')">${esc(m.name)} Lv.${m.level}</span>`
+    ).join('')}</div>
+  `;
+}
+
+async function openPack(packId) {
+  try {
+    const result = await api(`/api/game/packs/${packId}/open`, { method: 'POST' });
+
+    const overlay = document.createElement('div');
+    overlay.className = 'result-overlay';
+    overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+    overlay.innerHTML = `
+      <div class="result-box">
+        <h2>&#127873; Pack Results!</h2>
+        ${result.monster ? `<div class="pulled monster">&#9733; ${esc(result.monster.monsterId)} (Lv.${result.monster.level})</div>` : ''}
+        ${result.items?.map(id => `<div class="pulled item">&#9829; ${esc(id)}</div>`).join('') || ''}
+        <button class="btn btn-primary mt-16" onclick="this.closest('.result-overlay').remove()">OK</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    // Refresh
+    profile = await api('/api/game/profile');
+    vault = await api('/api/game/vault');
+    const cc = document.querySelector('.text-gold');
+    if (cc) cc.innerHTML = `&#9733; ${profile.currency}`;
+    toast('Pack opened!', 'success');
+  } catch (e) { toast(e.message, 'error'); }
+}
+
+// ── Arena ──────────────────────────────────────────────────────────
+
+async function renderArena(container) {
+  try { stages = await api('/api/game/stages'); } catch { stages = []; }
+  try { teams = await api('/api/game/teams'); } catch { teams = []; }
+
+  container.innerHTML = `
+    <h2 class="mb-16">Battle Arena</h2>
+    <div class="mb-8">Select a team and stage to battle.</div>
+    <div class="flex flex-wrap mb-16 gap-16">
+      <div>
+        <label class="text-dim" style="font-size:12px">Team:</label>
+        <select id="arena-team" class="btn btn-outline" style="padding:6px 12px;background:var(--bg);color:var(--text);border:1px solid var(--border)">
+          ${teams.map((t, i) => `<option value="${i}">${esc(t.name)}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="grid grid-2 mb-16" id="stage-list">
+      ${stages.map(s => `
+        <div class="stage-card card">
+          <h3>${esc(s.name)}</h3>
+          <div class="stars">${'&#9733;'.repeat(s.difficulty)}${'&#9734;'.repeat(5 - s.difficulty)}</div>
+          <div class="text-dim mt-8">${esc(s.description)}</div>
+          <div class="reward">&#9733; ${s.reward}</div>
+          <button class="btn btn-success btn-sm mt-8" onclick="startBattle('${s.id}')">Battle!</button>
+        </div>
+      `).join('')}
+    </div>
+    <div id="battle-result"></div>
+  `;
+}
+
+async function startBattle(stageId) {
+  const teamIdx = parseInt(document.getElementById('arena-team')?.value || '0', 10);
+
+  const resultDiv = document.getElementById('battle-result');
+  resultDiv.innerHTML = '<p class="text-dim">Battle in progress...</p>';
+
+  try {
+    const result = await api(`/api/game/battle/${teamIdx}/${stageId}`, { method: 'POST' });
+    profile = await api('/api/game/profile');
+
+    resultDiv.innerHTML = `
+      <div class="card">
+        <div class="flex flex-wrap mb-8">
+          <h3 style="${result.won ? 'color:var(--success)' : 'color:var(--danger)'}">${result.won ? 'VICTORY!' : 'DEFEATED'}</h3>
+          ${result.won ? `<div class="text-gold" style="margin-left:auto;font-size:18px">+${result.reward} &#9733;</div>` : ''}
+        </div>
+        <div class="battle-log">${result.log.map(l => `<div class="line sys">${esc(l)}</div>`).join('')}</div>
+      </div>
+    `;
+    if (result.won) toast(`Earned ${result.reward} currency!`, 'success');
+  } catch (e) {
+    resultDiv.innerHTML = `<div class="card"><h3 class="text-danger">Error</h3><p>${esc(e.message)}</p></div>`;
+  }
+}
+
+// ── Collection ─────────────────────────────────────────────────────
+
+async function renderCollection(container) {
+  try { vault = await api('/api/game/vault'); } catch { vault = { monsters: [], items: [], monsterVault: [], itemVault: [] }; }
+
+  const owned = new Map(); // monsterId -> { level, count }
+  for (const m of vault.monsterVault || []) {
+    const existing = owned.get(m.monsterId);
+    if (existing) { existing.count++; if (m.level > existing.level) existing.level = m.level; }
+    else { owned.set(m.monsterId, { monsterId: m.monsterId, level: m.level, count: 1 }); }
+  }
+
+  // Fetch full monster schemas for element/type info
+  let schemas = {};
+  try { schemas = await api('/api/schema'); } catch {}
+  let monsterData = {};
+  try {
+    const db = await api('/api/databases/monsters');
+    for (const entry of db.entries) {
+      const full = await api(`/api/databases/monsters/${entry.id}`);
+      monsterData[full.id] = full;
+    }
+  } catch {}
+
+  const ownedList = [...owned.values()].sort((a, b) => a.monsterId.localeCompare(b.monsterId));
+  const totalSpecies = ownedList.length;
+  const totalCount = vault.monsterVault?.length || 0;
+
+  container.innerHTML = `
+    <div class="flex flex-wrap mb-16">
+      <h2>Collection</h2>
+      <div class="flex" style="margin-left:auto;gap:12px">
+        <span class="badge" style="background:var(--accent);font-size:13px;padding:4px 12px">${totalSpecies} species</span>
+        <span class="badge" style="background:var(--accent);font-size:13px;padding:4px 12px">${totalCount} total</span>
+      </div>
+    </div>
+    ${ownedList.length === 0
+      ? `<div class="card"><p class="text-dim">No monsters yet. Open packs in the <a href="#shop" style="color:var(--primary)">Shop</a> to start your collection!</p></div>`
+      : `<div class="col-grid">${ownedList.map(m => {
+          const schema = monsterData[m.monsterId] || {};
+          const name = vault.monsters.find(x => x.id === m.monsterId)?.name || m.monsterId;
+          const els = schema.elements || [];
+          const types = schema.types || [];
+          return `<div class="col-card" onclick="showMonsterDetail('${m.monsterId}')" style="cursor:pointer">
+            <div class="sprite-wrap">
+              <img src="/images/monsters/${m.monsterId}.png" alt="${esc(name)}"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="fallback" style="display:none">?</div>
+            </div>
+            <div class="info">
+              <div class="name">${esc(name)}</div>
+              <div class="level">Lv.100 ${m.count > 1 ? '&times;' + m.count : ''}</div>
+              <div class="tags">${els.map(e => `<span class="tag tag-${e.toLowerCase()}">${e}</span>`).join('')}</div>
+            </div>
+          </div>`;
+        }).join('')}</div>`
+    }
+  `;
+}
+
+// ── Monster Detail Modal ───────────────────────────────────────────
+
+async function showMonsterDetail(monsterId) {
+  let data = {};
+  try { data = await api(`/api/databases/monsters/${monsterId}`); } catch { return; }
+  if (!data || !data.baseStats) return;
+
+  const bs = data.baseStats;
+  const statLabels = { hp: 'HP', atk: 'ATK', def: 'DEF', spAtk: 'SpAtk', spDef: 'SpDef', spe: 'SPE' };
+  const total = bs.hp + bs.atk + bs.def + bs.spAtk + bs.spDef + bs.spe;
+
+  // Fetch ability details
+  let abilityData = null;
+  if (data.abilityId) {
+    try { abilityData = await api(`/api/databases/abilities/${data.abilityId}`); } catch {}
+  }
+
+  // Fetch move details
+  let moveDataMap = {};
+  if (data.learnset && data.learnset.length) {
+    const movePromises = data.learnset.map(async (mid) => {
+      try {
+        const md = await api(`/api/databases/moves/${mid}`);
+        moveDataMap[mid] = md;
+      } catch {}
+    });
+    await Promise.all(movePromises);
+  }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+  function statValue(v) {
+    if (v >= 120) return `<span class="value high">${v}</span>`;
+    if (v >= 80) return `<span class="value mid">${v}</span>`;
+    return `<span class="value low">${v}</span>`;
+  }
+
+  overlay.innerHTML = `
+    <div class="modal">
+      <div class="sprite-large">
+        <img src="/images/monsters/${monsterId}.png" alt="${esc(data.name || monsterId)}"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="fallback" style="display:none">?</div>
+      </div>
+      <h2>${esc(data.name || monsterId)}</h2>
+      <div class="subtitle">${data.archetype || ''} ${data.isLegendary ? '&#9733; Legendary' : ''}</div>
+      <div class="tags">${(data.elements || []).map(e => `<span class="tag tag-${e.toLowerCase()}">${e}</span>`).join('')}
+        ${(data.types || []).map(t => `<span class="badge badge-el">${t}</span>`).join('')}</div>
+      <div style="margin-top:12px">
+        <div class="stat-row"><span class="label">Ability</span><span class="value">${abilityData ? esc(abilityData.name) : (data.abilityId || 'None')}</span></div>
+        ${abilityData && abilityData.description ? `<div style="font-size:12px;color:var(--text-dim);padding:4px 0 8px;border-bottom:1px solid var(--border)">${esc(abilityData.description)}</div>` : ''}
+        ${Object.entries(statLabels).map(([k, l]) =>
+          `<div class="stat-row"><span class="label">${l}</span>${statValue(bs[k] || 0)}</div>`
+        ).join('')}
+        <div class="stat-row"><span class="label">Total</span><span class="value">${total}</span></div>
+      </div>
+      ${data.learnset && data.learnset.length ? `
+        <div style="margin-top:12px">
+          <div class="text-dim" style="font-size:12px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Learnset</div>
+          <div class="learnset">${data.learnset.map(mid => {
+            const md = moveDataMap[mid];
+            const label = md ? `${md.name}${md.element ? ' [' + md.element + ']' : ''}${md.category ? ' (' + md.category + ')' : ''}${md.power ? ' ' + md.power : ''}` : mid;
+            return `<span class="move" title="${esc(md ? (md.description || label) : label)}">${esc(label)}</span>`;
+          }).join('')}</div>
+        </div>` : ''}
+      <button class="btn btn-primary mt-16" style="width:100%" onclick="this.closest('.modal-overlay').remove()">Close</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+// ── Init ───────────────────────────────────────────────────────────
+</script>
+</body>
+</html>
